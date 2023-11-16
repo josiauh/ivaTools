@@ -1,2 +1,3 @@
 yachalk
 pyYAML
+pyinstaller
