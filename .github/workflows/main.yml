@@ -85,11 +85,9 @@ jobs:
               
           - run: |
               gh release upload release --clobber builds/*
-              gh release edit release --title "Build $RELEASE_TAG"
           
         env:
                 GITHUB_TOKEN: ${{ secrets.RELEASETOKEN }}
-                RELEASE_TAG: ${{ env.release_tag }}
           
           
                 
