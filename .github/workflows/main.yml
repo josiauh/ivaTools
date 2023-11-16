@@ -52,7 +52,7 @@ jobs:
           if: matrix.os == 'windows-latest'
           with:
             name: windows
-            path: ./build/main/ivaTools.exe
+            path: ./dist/main/ivaTools.exe
         
         - name: Upload MacOS
           uses: actions/upload-artifact@v3.1.3
