@@ -32,6 +32,7 @@ jobs:
           run: python -m PyInstaller main.spec
 
         - name: Create MacOS Bundle
+          if: matrix.os == 'macos-latest'
           run: |
             mkdir -p ivaTools.app/Contents/MacOS
             mkdir -p ivaTools.app/Contents/Resources
