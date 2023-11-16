@@ -1,0 +1,56 @@
+on:
+  push:
+    branches:
+    - main
+jobs:
+   build:
+     name: Build for ${{ matrix.osName }}
+     runs-on: ${{ matrix.os }}
+
+     strategy:
+          matrix:
+              os: [ubuntu-latest, windows-latest, macos-latest]
+              osName: [linux, windows, macos]
+              buildPath: [./build/main/ivaTools, ./build/main/ivaTools.exe, ./build/main/ivaTools.app]
+     steps:
+        - name: Install Dependencies
+          run: pip install -r requirements.txt
+      
+        - name: Install PyInstaller
+          run: pip install pyInstaller
+
+        - name: Package it all up
+          run: python -m PyInstaller main.spec
+
+        - name: Upload a Build Artifact
+          uses: actions/upload-artifact@v3.1.3
+          with:
+            name: ${{ matrix.osName }}
+            path: ${{ matrix.buildPath 
+            
+   release:
+        runs-on: ubuntu-latest
+        needs: [build]
+    
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v3
+    
+          - uses: actions/download-artifact@v3
+            with:
+              name: linux
+              path: linux
+    
+          - uses: actions/download-artifact@v3
+            with:
+              name: macos
+              path: macos
+    
+          - uses: actions/download-artifact@v3
+            with:
+              name: windows
+              path: windows
+          
+                
+              
+            
