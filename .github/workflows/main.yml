@@ -12,6 +12,8 @@ jobs:
               os: [ubuntu-latest, windows-latest, macos-latest]
               buildPath: [./build/main/ivaTools, ./build/main/ivaTools.exe, ./build/main/ivaTools.app]
      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
         - name: Install Dependencies
           run: pip install -r requirements.txt
       
@@ -66,7 +68,7 @@ jobs:
           - run: gh release upload release --clobber builds/*
           
         env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GITHUB_TOKEN: ${{ secrets.RELEASETOKEN }}
           
           
                 
