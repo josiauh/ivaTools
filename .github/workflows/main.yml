@@ -26,7 +26,7 @@ jobs:
           uses: actions/upload-artifact@v3.1.3
           with:
             name: ${{ matrix.osName }}
-            path: ${{ matrix.buildPath 
+            path: ${{ matrix.buildPath }}
             
    release:
         runs-on: ubuntu-latest
