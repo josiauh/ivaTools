@@ -10,7 +10,6 @@ jobs:
      strategy:
           matrix:
               os: [ubuntu-latest, windows-latest, macos-latest]
-              buildPath: [./build/main/ivaTools, ./build/main/ivaTools.exe, ./build/main/ivaTools.app]
      steps:
         - name: Checkout code
           uses: actions/checkout@v3
@@ -20,8 +19,26 @@ jobs:
         - name: Install PyInstaller
           run: pip install pyInstaller
 
-        - name: Package it all up
+        - name: Package Linux ONLY
+          if: matrix.os == 'ubuntu-latest'
           run: python -m PyInstaller main.spec
+
+        - name: Package Windows ONLY
+          if: matrix.os == 'windows-latest'
+          run: python -m PyInstaller main.spec --icon=.\windows\icon.ico
+        
+        - name: Package MacOS ONLY
+          if: matrix.os == 'macos-latest'
+          run: python -m PyInstaller main.spec
+
+        - name: Create MacOS Bundle
+          run: |
+            mkdir -p ivaTools.app/Contents/MacOS
+            mkdir -p ivaTools.app/Contents/Resources
+            cp macOS/Info.plist ivaTools.app/Contents/Info.plist
+            mv ./build/main/ivaTools ivaTools.app/Contents/MacOS/ivaTools
+            cp macOS/icon.icns ivaTools.app/Contents/Resources/icon.icns
+            zip -r ivaTools.MacOS.zip ivaTools.app
 
         - name: Upload Linux
           uses: actions/upload-artifact@v3.1.3
@@ -35,12 +52,13 @@ jobs:
           with:
             name: windows
             path: ./build/main/ivaTools.exe
+        
         - name: Upload MacOS
           uses: actions/upload-artifact@v3.1.3
           if: matrix.os == 'macos-latest'
           with:
             name: macOS
-            path: ./build/main/ivaTools.app
+            path: ivaTools.MacOS.zip
             
    release:
         runs-on: ubuntu-latest
