@@ -26,6 +26,10 @@ jobs:
         - name: Package Windows ONLY
           if: matrix.os == 'windows-latest'
           run: python -m PyInstaller win.spec
+
+        - name: Rename Windows Executable
+          if: matrix.os == 'windows-latest'
+          run: mv ./dist/main/main.exe ./dist/main/ivaTools.exe
         
         - name: Package MacOS ONLY
           if: matrix.os == 'macos-latest'
