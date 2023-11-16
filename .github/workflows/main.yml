@@ -4,13 +4,12 @@ on:
     - main
 jobs:
    build:
-     name: Build for ${{ matrix.osName }}
+     name: Build for ${{ matrix.os }}
      runs-on: ${{ matrix.os }}
 
      strategy:
           matrix:
               os: [ubuntu-latest, windows-latest, macos-latest]
-              osName: [linux, windows, macos]
               buildPath: [./build/main/ivaTools, ./build/main/ivaTools.exe, ./build/main/ivaTools.app]
      steps:
         - name: Install Dependencies
@@ -22,11 +21,24 @@ jobs:
         - name: Package it all up
           run: python -m PyInstaller main.spec
 
-        - name: Upload a Build Artifact
+        - name: Upload Linux
           uses: actions/upload-artifact@v3.1.3
+          if: matrix.os == 'ubuntu-latest'
           with:
-            name: ${{ matrix.osName }}
-            path: ${{ matrix.buildPath }}
+            name: linux
+            path: ./build/main/ivaTools
+        - name: Upload Windows
+          uses: actions/upload-artifact@v3.1.3
+          if: matrix.os == 'windows-latest'
+          with:
+            name: windows
+            path: ./build/main/ivaTools.exe
+        - name: Upload MacOS
+          uses: actions/upload-artifact@v3.1.3
+          if: matrix.os == 'macos-latest'
+          with:
+            name: macOS
+            path: ./build/main/ivaTools.app
             
    release:
         runs-on: ubuntu-latest
@@ -39,17 +51,23 @@ jobs:
           - uses: actions/download-artifact@v3
             with:
               name: linux
-              path: linux
+              path: builds
     
           - uses: actions/download-artifact@v3
             with:
-              name: macos
-              path: macos
+              name: macOS
+              path: builds
     
           - uses: actions/download-artifact@v3
             with:
               name: windows
-              path: windows
+              path: builds
+              
+          - run: gh release upload release --clobber builds/*
+          
+        env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
           
                 
               
