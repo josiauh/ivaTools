@@ -3,6 +3,7 @@ from yaml import Loader
 from yachalk import chalk
 from vars import Vars
 import os
+initialPath = os.environ.get("TMP") | "/ivaToolsTMP/"
 defaultDoc = """
 projectName: myProject
 done:
@@ -13,15 +14,15 @@ todo:
   - beanie baby frog
 """
 try:
-    with open(os.environ.get("TMP") + "\\ivaTools\\project.yml", "r") as f:
+    with open(initialPath + "/ivaTools/project.yml", "r") as f:
         doc = f.read()
 except FileNotFoundError:
-    open(os.environ.get("TMP") + "\\ivaTools\\project.yml", "x")
-    with open(os.environ.get("TMP") + "\\ivaTools\\project.yml", "w") as f:
+    open(initialPath + "/ivaTools/project.yml", "x")
+    with open(initialPath + "/ivaTools/project.yml", "w") as f:
         f.write(defaultDoc)
         doc = defaultDoc
 except:
-    print(chalk.red("Error while reading " + os.environ.get("TMP") + "\\ivaTools\\project.yml, maybe does not exist?"))
+    print(chalk.red("Error while reading " + initialPath + "/ivaTools/project.yml, maybe does not exist?"))
     doc = defaultDoc
 
 
@@ -75,5 +76,5 @@ class projTracking:
                 projectTasks["projectName"] = taskName
             if (william.startswith("help")):
                 print(Vars.projTrackHelp)
-            with open(os.environ.get("TMP") + "\\ivaTools\\project.yml", "w") as f:
+            with open(initialPath + "/ivaTools/project.yml", "w") as f:
                 yaml.dump(projectTasks, f, allow_unicode=True)
