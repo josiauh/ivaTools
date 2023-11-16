@@ -4,7 +4,7 @@ from yachalk import chalk
 from vars import Vars
 import os
 import sys
-initialPath = os.environ.get("TMP") if os.environ.get("TMP") != None else "/ivaToolsTMP/"
+initialPath = os.environ.get("TMP") if os.environ.get("TMP") != None or os.environ.get("TMP") != "" else "/ivaToolsTMP/"
 defaultDoc = """
 projectName: myProject
 done:
