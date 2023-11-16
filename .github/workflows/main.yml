@@ -25,7 +25,7 @@ jobs:
 
         - name: Package Windows ONLY
           if: matrix.os == 'windows-latest'
-          run: python -m PyInstaller main.spec --icon=.\windows\icon.ico
+          run: python -m PyInstaller win.spec
         
         - name: Package MacOS ONLY
           if: matrix.os == 'macos-latest'
